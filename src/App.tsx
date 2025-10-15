@@ -17,6 +17,7 @@ import fileImg from './assets/file.png';
 import hbImg from './assets/hb.png';
 import houseImg from './assets/house.png';
 import percentImg from './assets/percent.png';
+import rubIcon from './assets/rub.svg';
 import { LS, LSKeys } from './ls';
 import { appSt } from './style.css';
 import { ThxLayout } from './thx/ThxLayout';
@@ -59,7 +60,8 @@ export const App = () => {
   const [sum, setSum] = useState(2000);
   const [period, setPeriod] = useState(12);
   const [error, setError] = useState<string | null>(null);
-  const [step, setStep] = useState<'step1' | 'step2'>('step2');
+  const [step, setStep] = useState<'step1' | 'step2' | 'step3'>('step1');
+  const [checked, setChecked] = useState(false);
 
   useEffect(() => {
     if (!LS.getItem(LSKeys.UserId, null)) {
@@ -71,10 +73,10 @@ export const App = () => {
     setLoading(true);
 
     sendDataToGA({
-      sum: sum.toString(),
+      sum: checked ? 'all' : sum.toString(),
       period,
       avto: 'none',
-      var4: 'none',
+      var4: step === 'step2' ? 'Открыть' : 'Перевести со вклада',
     }).then(() => {
       LS.setItem(LSKeys.ShowThx, true);
       setThx(true);
@@ -92,6 +94,113 @@ export const App = () => {
 
   if (thxShow) {
     return <ThxLayout />;
+  }
+
+  if (step === 'step3') {
+    return (
+      <>
+        <div className={appSt.container}>
+          <Typography.TitleResponsive style={{ marginTop: '1rem' }} tag="h1" view="medium" font="system" weight="bold">
+            Гарантированный доход
+          </Typography.TitleResponsive>
+          <Typography.Text view="primary-medium">
+            Ваши деньги приносят доход. Условия и ставка не меняется весь срок. Деньги зачислятся, когда вклад закроется
+          </Typography.Text>
+
+          <div style={{ marginTop: '12px' }}>
+            <Typography.Text view="primary-small" color="secondary" tag="p" defaultMargins={false}>
+              Откуда пополнить
+            </Typography.Text>
+
+            <div className={appSt.bannerAccount}>
+              <img src={rubIcon} width={76} height={48} alt="rubIcon" />
+
+              <Typography.Text view="primary-small">Альфа-Вклад</Typography.Text>
+            </div>
+          </div>
+
+          <div>
+            <AmountInput
+              label="Сколько"
+              labelView="outer"
+              value={sum}
+              error={error}
+              onChange={handleChangeInput}
+              block
+              minority={1}
+              bold={false}
+              min={1000}
+              max={1_000_000}
+              disabled={checked}
+              positiveOnly
+              integersOnly
+              onBlur={() => {
+                if (sum < 1000) {
+                  setSum(1000);
+                } else if (sum > 1_000_000) {
+                  setSum(1_000_000);
+                }
+              }}
+            />
+          </div>
+
+          <div>
+            <Swiper style={{ marginLeft: '0' }} spaceBetween={8} slidesPerView="auto">
+              <SwiperSlide style={{ maxWidth: 'min-content' }}>
+                <Tag size={32} view="filled" shape="rectangular" checked={checked} onClick={() => setChecked(!checked)}>
+                  <Typography.Text view="primary-small">Перевести всё</Typography.Text>
+                </Tag>
+              </SwiperSlide>
+            </Swiper>
+          </div>
+
+          <div>
+            <Typography.Text view="primary-small" color="secondary">
+              На какой срок
+            </Typography.Text>
+            <Gap size={8} />
+            <Swiper style={{ marginLeft: '0' }} spaceBetween={8} slidesPerView="auto">
+              {chipsPeriod.map(chip => (
+                <SwiperSlide key={chip} style={{ maxWidth: 'min-content' }}>
+                  <Tag size={40} view="filled" shape="rectangular" checked={chip === period} onClick={() => setPeriod(chip)}>
+                    <Typography.Text view="primary-medium">
+                      {formatWord(chip, ['месяц', 'месяца', 'месяцев'])}
+                    </Typography.Text>
+                  </Tag>
+                </SwiperSlide>
+              ))}
+            </Swiper>
+          </div>
+          <div>
+            <Typography.Text view="primary-small" color="secondary">
+              Ваша ставка
+            </Typography.Text>
+            <Gap size={8} />
+            <Typography.TitleResponsive tag="h4" view="xsmall" font="system" weight="medium">
+              {(chipsPercentByPeriod[period] * 100).toLocaleString('ru')}%
+            </Typography.TitleResponsive>
+          </div>
+        </div>
+        <Gap size={96} />
+
+        <div className={appSt.bottomBtn}>
+          <ButtonMobile
+            view="secondary"
+            size={56}
+            style={{ minWidth: 56, maxWidth: 56 }}
+            onClick={() => {
+              setStep('step1');
+            }}
+            disabled={loading}
+          >
+            <ChevronLeftMIcon />
+          </ButtonMobile>
+          <ButtonMobile loading={loading} block view="primary" size={56} onClick={submit}>
+            Продолжить
+          </ButtonMobile>
+        </div>
+      </>
+    );
   }
 
   if (step === 'step2') {
@@ -178,10 +287,11 @@ export const App = () => {
             onClick={() => {
               setStep('step1');
             }}
+            disabled={loading}
           >
             <ChevronLeftMIcon />
           </ButtonMobile>
-          <ButtonMobile block view="primary" size={56} onClick={submit}>
+          <ButtonMobile loading={loading} block view="primary" size={56} onClick={submit}>
             Продолжить
           </ButtonMobile>
         </div>
@@ -399,11 +509,10 @@ export const App = () => {
           </div>
         ))}
       </div>
-      <Gap size={96} />
+      <div style={{ height: '150px' }} />
 
-      <div className={appSt.bottomBtn}>
+      <div className={appSt.bottomBtnStep1}>
         <ButtonMobile
-          loading={loading}
           block
           view="primary"
           onClick={() => {
@@ -411,7 +520,17 @@ export const App = () => {
             setStep('step2');
           }}
         >
-          К подключению
+          Открыть
+        </ButtonMobile>
+        <ButtonMobile
+          block
+          view="secondary"
+          onClick={() => {
+            window.gtag('event', '6446_card_transfer', { var: 'var4' });
+            setStep('step3');
+          }}
+        >
+          Перевести со вклада
         </ButtonMobile>
       </div>
     </>

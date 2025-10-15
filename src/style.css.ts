@@ -12,6 +12,17 @@ const bottomBtn = style({
   gap: '8px',
   backgroundColor: '#FFFFFF',
 });
+const bottomBtnStep1 = style({
+  position: 'fixed',
+  zIndex: 2,
+  width: '100%',
+  padding: '12px',
+  bottom: 0,
+  display: 'flex',
+  flexDirection: 'column',
+  gap: '12px',
+  backgroundColor: '#FFFFFF',
+});
 
 const container = style({
   display: 'flex',
@@ -74,6 +85,16 @@ const percentBox = recipe({
   },
 });
 
+const bannerAccount = style({
+  padding: '16px',
+  backgroundColor: '#F5F5F8',
+  borderRadius: '16px',
+  display: 'flex',
+  alignItems: 'center',
+  gap: '1rem',
+  marginTop: '6px',
+});
+
 export const appSt = {
   bottomBtn,
   container,
@@ -82,4 +103,6 @@ export const appSt = {
   boxB,
   row,
   percentBox,
+  bannerAccount,
+  bottomBtnStep1,
 };
