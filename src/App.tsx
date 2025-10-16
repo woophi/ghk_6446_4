@@ -48,9 +48,9 @@ const chipsData = [10000, 36000, 50000, 72000];
 const chipsPeriod = [6, 12, 24];
 
 const chipsPercentByPeriod: Record<number, number> = {
-  6: 0.16,
-  12: 0.175,
-  24: 0.19,
+  6: 0.1801,
+  12: 0.165,
+  24: 0.136,
 };
 
 export const App = () => {
@@ -129,16 +129,16 @@ export const App = () => {
               block
               minority={1}
               bold={false}
-              min={1000}
-              max={1_000_000}
+              min={1_000}
+              max={100_000_000}
               disabled={checked}
               positiveOnly
               integersOnly
               onBlur={() => {
-                if (sum < 1000) {
-                  setSum(1000);
-                } else if (sum > 1_000_000) {
-                  setSum(1_000_000);
+                if (sum < 1_000) {
+                  setSum(1_000);
+                } else if (sum > 100_000_000) {
+                  setSum(100_000_000);
                 }
               }}
             />
@@ -517,6 +517,7 @@ export const App = () => {
           view="primary"
           onClick={() => {
             window.gtag('event', '6446_card_active', { var: 'var4' });
+            setSum(2_000);
             setStep('step2');
           }}
         >
@@ -527,6 +528,7 @@ export const App = () => {
           view="secondary"
           onClick={() => {
             window.gtag('event', '6446_card_transfer', { var: 'var4' });
+            setSum(100_000);
             setStep('step3');
           }}
         >
