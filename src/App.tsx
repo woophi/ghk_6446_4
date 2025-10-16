@@ -48,9 +48,9 @@ const chipsData = [10000, 36000, 50000, 72000];
 const chipsPeriod = [6, 12, 24];
 
 const chipsPercentByPeriod: Record<number, number> = {
-  6: 0.19,
+  6: 0.16,
   12: 0.175,
-  24: 0.16,
+  24: 0.19,
 };
 
 export const App = () => {
