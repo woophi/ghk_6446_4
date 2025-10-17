@@ -7,6 +7,7 @@ const container = style({
   alignItems: 'center',
   padding: '0 1rem',
   textAlign: 'center',
+  minHeight: '100vh',
 });
 
 const rocket = style({
