@@ -4,7 +4,7 @@ import sparkles from '../assets/sparkles.png';
 import { appSt } from '../style.css';
 import { thxSt } from './style.css';
 
-const link = 'alfabank:///';
+const LINK = 'alfabank://longread?endpoint=v1/adviser/longreads/79127';
 
 export const ThxLayout = () => {
   return (
@@ -19,7 +19,7 @@ export const ThxLayout = () => {
         </Typography.Text>
       </div>
       <div className={appSt.bottomBtn}>
-        <ButtonMobile block view="secondary" href={link}>
+        <ButtonMobile block view="secondary" href={LINK}>
           Спасибо, понятно!
         </ButtonMobile>
       </div>
