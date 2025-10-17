@@ -55,6 +55,10 @@ const chipsPercentByPeriod: Record<number, number> = {
 
 const LINK = 'alfabank://longread?endpoint=v1/adviser/longreads/79127';
 
+if (LS.getItem(LSKeys.ShowThx, false)) {
+  window.location.replace(LINK);
+}
+
 export const App = () => {
   const [loading, setLoading] = useState(false);
   const [thxShow] = useState(LS.getItem(LSKeys.ShowThx, false));
