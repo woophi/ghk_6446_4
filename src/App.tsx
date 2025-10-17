@@ -104,7 +104,8 @@ export const App = () => {
             Гарантированный доход
           </Typography.TitleResponsive>
           <Typography.Text view="primary-medium">
-            Ваши деньги приносят доход. Условия и ставка не меняется весь срок. Деньги зачислятся, когда вклад закроется
+            Ваши деньги приносят доход. Условия и ставка не меняется весь срок.{' '}
+            <span style={{ fontWeight: 500 }}>Деньги зачислятся, когда вклад закроется</span>
           </Typography.Text>
 
           <div style={{ marginTop: '12px' }}>
